@@ -1,23 +1,58 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState} from "react";
+import Item from "./components/Item";
+import {v4 as uuidv4 } from "uuid";
 
 function App() {
+  const [name, setName] = useState('')
+  const [item, setItem ] = useState('');
+  const [itemList, setItemList] = useState([]);
+  const [editingText, setEditingText] = useState('')
+
+  const handleChange = (e) => {
+    setItem(e.target.value)
+  }
+
+  const addItem = (e) => {
+    e.preventDefault()
+    setItemList([...itemList, { id: uuidv4(), item: item}]);
+    setItem('');
+    console.log(itemList)
+  }
+
+  const deleteItem = (id) => {
+    setItemList(itemList.filter((item) => item.id !== id))
+  }
+  const editItem = id => {
+    const updatedItems = [...itemList].map((item) => {
+      if(item.id === id){
+        item.text = editingText;
+      }
+      return item
+    })
+    setItemList(updatedItems)
+    setEditingText('')
+  }
+  // const editItem = (id, newTitle) => {
+  //   const updatedItems = itemList.map((item) => {
+  //     if(item.id === id){
+  //       return {...item, title: newTitle}
+  //     }
+  //     return item;
+  //   })
+  //   setItemList(updatedItems);
+  // }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="text" value={item} placeholder="Add the item" onChange={handleChange}/>
+      <input type="text" value={editingText} placeholder="Add the item" onChange={(e) => setEditingText(e.target.value)}/>
+      <button onClick={addItem}>ADD ITEM</button>
+      {itemList.map((item)=> {
+        return (
+        <Item key={item.id} item={item} deleteItem={deleteItem}
+        editItem={editItem} editingText={editingText} setEditingText={setEditingText} name={name} setNmae={setName}/>
+        )
+      })}
     </div>
   );
 }
