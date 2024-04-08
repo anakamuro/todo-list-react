@@ -1,13 +1,13 @@
 import './App.css';
 import React, {useState} from "react";
-import Item from "./components/Item";
+// import Item from "./components/Item";
 import {v4 as uuidv4 } from "uuid";
 
 function App() {
-  const [name, setName] = useState('')
   const [item, setItem ] = useState('');
   const [itemList, setItemList] = useState([]);
-  const [editingText, setEditingText] = useState('')
+  const [editingItem, setEditingItem] = useState('')
+  const [itemEditing, setItemEditing] = useState('')
 
   const handleChange = (e) => {
     setItem(e.target.value)
@@ -26,12 +26,12 @@ function App() {
   const editItem = id => {
     const updatedItems = [...itemList].map((item) => {
       if(item.id === id){
-        item.text = editingText;
+        item.item = editingItem;
       }
       return item
     })
     setItemList(updatedItems)
-    setEditingText('')
+    setEditingItem('')
   }
   // const editItem = (id, newTitle) => {
   //   const updatedItems = itemList.map((item) => {
@@ -45,13 +45,22 @@ function App() {
   return (
     <div className="App">
       <input type="text" value={item} placeholder="Add the item" onChange={handleChange}/>
-      <input type="text" value={editingText} placeholder="Add the item" onChange={(e) => setEditingText(e.target.value)}/>
+      {/* <input type="text" value={editingItem} placeholder="Add the item" onChange={(e) => setEditingItem(e.target.value)}/> */}
       <button onClick={addItem}>ADD ITEM</button>
       {itemList.map((item)=> {
-        return (
-        <Item key={item.id} item={item} deleteItem={deleteItem}
-        editItem={editItem} editingText={editingText} setEditingText={setEditingText} name={name} setNmae={setName}/>
-        )
+         {itemEditing === item.id ? 
+          (<input 
+            value="text"
+            onChange={(e) => setEditingItem(e.target.value)}
+       
+            >{item.editingItem}</input>)
+            :
+            (<div>{item.item}</div>)}
+      
+            <button onClick={()=>deleteItem(item.id)}>DELETE ITEM</button>
+           {editingItem === item.id ? (<button onClick={()=>setItemEditing(item.id)}>Submit ITEM</button>) :
+            (<button onClick={()=>editItem(item.id)}>Edit ITEM</button>
+          )}
       })}
     </div>
   );
