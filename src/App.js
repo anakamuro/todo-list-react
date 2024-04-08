@@ -1,13 +1,13 @@
+import logo from './logo.svg';
 import './App.css';
 import React, {useState} from "react";
-// import Item from "./components/Item";
+import Item from "./components/Item";
 import {v4 as uuidv4 } from "uuid";
 
 function App() {
   const [item, setItem ] = useState('');
   const [itemList, setItemList] = useState([]);
-  const [editingItem, setEditingItem] = useState('')
-  const [itemEditing, setItemEditing] = useState('')
+  // const [editingText, setEditingText] = useState('')
 
   const handleChange = (e) => {
     setItem(e.target.value)
@@ -23,16 +23,16 @@ function App() {
   const deleteItem = (id) => {
     setItemList(itemList.filter((item) => item.id !== id))
   }
-  const editItem = id => {
-    const updatedItems = [...itemList].map((item) => {
-      if(item.id === id){
-        item.item = editingItem;
-      }
-      return item
-    })
-    setItemList(updatedItems)
-    setEditingItem('')
-  }
+  // const editItem = id => {
+  //   const updatedItems = [...itemList].map((item) => {
+  //     if(item.id === id){
+  //       item.text = editingText;
+  //     }
+  //     return item
+  //   })
+  //   setItemList(updatedItems)
+  //   setEditingText('')
+  // }
   // const editItem = (id, newTitle) => {
   //   const updatedItems = itemList.map((item) => {
   //     if(item.id === id){
@@ -44,23 +44,14 @@ function App() {
   // }
   return (
     <div className="App">
-      <input type="text" value={item} placeholder="Add the item" onChange={handleChange}/>
-      {/* <input type="text" value={editingItem} placeholder="Add the item" onChange={(e) => setEditingItem(e.target.value)}/> */}
-      <button onClick={addItem}>ADD ITEM</button>
+      <input className="add-input" type="text" value={item} placeholder="Add the item" onChange={handleChange}/>
+      {/* <input type="text" value={editingText} placeholder="Add the item" onChange={(e) => setEditingText(e.target.value)}/> */}
+      <button className="add-btn" onClick={addItem}>ADD ITEM</button>
       {itemList.map((item)=> {
-         {itemEditing === item.id ? 
-          (<input 
-            value="text"
-            onChange={(e) => setEditingItem(e.target.value)}
-       
-            >{item.editingItem}</input>)
-            :
-            (<div>{item.item}</div>)}
-      
-            <button onClick={()=>deleteItem(item.id)}>DELETE ITEM</button>
-           {editingItem === item.id ? (<button onClick={()=>setItemEditing(item.id)}>Submit ITEM</button>) :
-            (<button onClick={()=>editItem(item.id)}>Edit ITEM</button>
-          )}
+        return (
+        <Item key={item.id} item={item} deleteItem={deleteItem}
+       />
+        )
       })}
     </div>
   );

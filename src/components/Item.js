@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Item({item, deleteItem, editItem }) {
+function Item({item, deleteItem }) {
   return (
-    <div>
+    <div className="show-item">
     <div>ItemName: {item.item}</div>
-    <button onClick={()=>deleteItem(item.id)}>DELETE ITEM</button>
-    <button onClick={()=>editItem(item.id)}>Edit ITEM</button>
+    <button className="del-btn" onClick={()=>deleteItem(item.id)}>DELETE ITEM</button>
+    {/* <button onClick={()=>editItem(item.id)}>Edit ITEM</button> */}
     </div>
   )
 }
